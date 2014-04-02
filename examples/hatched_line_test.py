@@ -1,13 +1,13 @@
 #!/usr/local/bin/python
 """
 
-	2_indep_1_dep.py 
+    hatched_line_test.py 
 
-Carpet plot of two independant variables against one dependant  
+Example script for adding a hatched line 
 
 Copyright (c) 2004-2013 by pyACDT Developers
 All rights reserved.
-Revision: 1.0 - $Date: 02/04/2014$
+Revision: Stephen Andrews - $Date: 02/04/2014$
 
 
 Developers:
@@ -16,8 +16,7 @@ Developers:
 
 History
 -------
-    v. 1
-   .0  - 
+    v. Stephen Andrews  - 
 """
 
 __version__ = '$Revision: $'
@@ -31,7 +30,7 @@ To Do:
 # Standard Python modules
 # =============================================================================
 import os, sys
-import pdb
+
 # =============================================================================
 # External Python modules
 # =============================================================================
@@ -47,22 +46,21 @@ from pyCarpetPlot import *
 # =============================================================================
 # 
 # =============================================================================
-f = lambda x1 ,x2: x1**2+x2**2-2*x1-2*x2+2
+       
+xx = numpy.linspace(0,10,11)
+yy1 = xx**2
+yy2 = 2 * yy1
+yy3 = 0.5 * yy1
+# yy2 = 2 * xx
 
-x1 = numpy.linspace(2,5,4)
-x2 = numpy.linspace(1,3,3)
+ax1 = plt.subplot(111)
+ax1.plot(xx,yy1, 'ok')
+ax1.set_xlabel('X Values')
+ax1.set_ylabel('Y Values')
 
-fobj = []
-for i in xrange(len(x1)):
-	tmp = []
-	for j in xrange(len(x2)):
-		tmp.append(f(x1[i], x2[j]))
-	#end
-	fobj.append(tmp)
-#end
+ax1 = hatched_line(xx, yy2, ax1, flip = True)
+ax1 = hatched_line(xx, yy3, ax1, flip = False)
+ax1 = hatched_line([0,10], [20]*2, ax1, flip = True)
+ax1 = hatched_line([0,10], [40]*2, ax1, flip = False)
 
-fobj = numpy.array(fobj)
-
-# pdb.set_trace()
-ax1 = carpet_plot(x1,x2,fobj.T, ofst = 1, label1 = r'$x_{1}$', label2 = r'$x_{2}$', label1_loc = 'start', dep_title = 'Dependant Variable')
 plt.show()

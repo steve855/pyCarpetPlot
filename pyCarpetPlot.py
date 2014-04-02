@@ -32,6 +32,7 @@ To Do:
 import os, sys
 import pdb
 from math import radians, sin, cos, ceil
+
 # =============================================================================
 # External Python modules
 # =============================================================================
@@ -43,11 +44,11 @@ import matplotlib.pyplot as plt
 # =============================================================================
 sys.path.append(os.path.abspath('../'))
 
-
 # =============================================================================
 # 
 # =============================================================================
-def carpet_plot(x1, x2, y, ofst = 1, ofst2 = 0.0, axis = None, x1_skip = None, x2_skip = None, label1 = '', label2 = '',  label1_loc = 'end', label2_loc = 'end', dep_title = '', contour_data = None):
+
+def carpet_plot(x1, x2, y, ofst = 1, ofst2 = 0.0, axis = None, x1_skip = 1, x2_skip = 1, label1 = '', label2 = '',  label1_loc = 'end', label2_loc = 'end', dep_title = '', contour_data = None):
     '''
 
     Generates a carpet plot of the data 
@@ -93,11 +94,11 @@ def carpet_plot(x1, x2, y, ofst = 1, ofst2 = 0.0, axis = None, x1_skip = None, x
     y = numpy.array(y)
     contour_data = numpy.array(contour_data)
 
-    for var in [y, contour_data]: 
-        if not (len(x2), len(x1)) == numpy.shape(var):
-            raise Exception('Shape of input does not agree %s != (%d x %d)'%(numpy.shape(var), len(x2), len(x1)))
-        #end
-    #end
+    # for var in [y, contour_data]: 
+    #     if not (len(x2), len(x1)) == var.shape:
+    #         raise Exception('Shape of input does not agree %s != (%d x %d)'%(var.shape, len(x2), len(x1)))
+    #     #end
+    # #end
 
     def label_map(label_loc):     
         if label_loc == None : return None
@@ -132,21 +133,25 @@ def carpet_plot(x1, x2, y, ofst = 1, ofst2 = 0.0, axis = None, x1_skip = None, x
     for i in xrange(0,len(x1),x1_skip):
         ax1.plot(x_cheat[:,i], y[:,i], '-k')
         if not label1_loc == None:
-            # ax1.annotate(r'%s = %3.2f'%(label1, x1[i]), xy = (x_cheat[label1_loc,i], y[label1_loc,i]), xytext = (15, 0), textcoords = 'offset points')
-            draw_label(r'%s = %3.2f'%(label1, x1[i]), (x_cheat[label1_loc,i], y[label1_loc,i]), label1_loc, ax1)
+            ax1.annotate(r'%s = %3.2f'%(label1, x1[i]), xy = (x_cheat[label1_loc,i], y[label1_loc,i]), xytext = (15, 0), textcoords = 'offset points')
+            # draw_label(r'%s = %3.2f'%(label1, x1[i]), (x_cheat[label1_loc,i], y[label1_loc,i]), label1_loc, ax1)
         #end
     #end
 
     for i in xrange(0,len(x2),x2_skip):
         ax1.plot(x_cheat[i,:], y[i,:], '-k')
         if not label2_loc == None:
-            # ax1.annotate(r'%s = %3.2f'%(label2, x2[i]), xy = (x_cheat[i,label2_loc], y[i,label2_loc]), xytext = (0, 15), textcoords = 'offset points')
-            draw_label(r'%s = %3.2f'%(label2, x2[i]), (x_cheat[i,label2_loc], y[i,label2_loc]), label2_loc, ax1)
+            ax1.annotate(r'%s = %3.2f'%(label2, x2[i]), xy = (x_cheat[i,label2_loc], y[i,label2_loc]), xytext = (10, 15), textcoords = 'offset points')
+            # draw_label(r'%s = %3.2f'%(label2, x2[i]), (x_cheat[i,label2_loc], y[i,label2_loc]), label2_loc, ax1)
         #end
 
     if not contour_data == None:
-        CS = ax1.contour(x_cheat, y, contour_data, colors='b')
-        ax1.clabel(CS, fontsize=9, inline=1)
+        try:
+            CS = ax1.contour(x_cheat, y, contour_data, colors='b')
+            ax1.clabel(CS, fontsize=9, inline=1)
+        except:
+            pass
+        #end
     #end
 
     ax1.set_ylabel(dep_title)
@@ -155,7 +160,7 @@ def carpet_plot(x1, x2, y, ofst = 1, ofst2 = 0.0, axis = None, x1_skip = None, x
     return ax1
 #end
 
-def add_hatched_line(x, y, axis, spc = 0.03, theta = 45, len_tick = 0.015, flip = False, linestyle = None):
+def hatched_line(x, y, axis, spc = 0.03, theta = 45, len_tick = 0.015, flip = False, linestyle = None):
     try:
         from scipy.interpolate import interp1d 
     except:
