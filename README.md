@@ -5,7 +5,7 @@ Library of Python functions to generate carpet plots
 
 **Author**: Stephen Andrews
 			<www.aircraftdesign.ca>
-			
+
 **Acknowledgements**: This library is heavily based on the matlab functions provided by Dr. McDonals in Ref. 1.
 
 Dependencies
@@ -44,28 +44,33 @@ Examples
 
 Thee example plots are contained in the examples directory
 
-2_indep_1_dep
--------------
+2_indep_1_dep.py
+----------------
 
 This example shows a carpet plot of two a dependant variable against two independent variables x1 and x2. Two different choices of offset are shown. The choice of offset is difficult to determine *a priori* but can be modified to ensure that the grid is nicely spaced.
 
-![](./examples/images/2i_1d_good_offset.png =250x)
-"Two independent against one dependant - good offset choice"
+![](./examples/images/2i_1d_good_offset.png "Two independent against one dependant - good offset choice")
 
-<!-- ![](./examples/images/2i_1d_bad_offset.png "Two independent against one dependant - poor offset choice"  =250x) -->
+![](./examples/images/2i_1d_bad_offset.png "Two independent against one dependant - poor offset choice")
 
-2_indep_1_dep
+
+2_indep_2_dep
 -------------
 
 This example shows a carpet plot where two dependant values are plotted against two independent values. The first dependant value is shown on the ordinate axis while a contour of the second dependant variable is superimposed on the grid of iso-lines of x1 and x2. In this plot, the value of x1 and x2 which yeild the desired combinations of the two dependant variables y1 and y2 can be easily identified.
+
+![](./examples/images/2i_2d.png "Two independent against two dependant")
 
 
 3_indep_1_dep
 -------------
 
-The example can be thought of as a series of three 2DOF carpet plots each corresponding to a different constant value of a third independant variable. Since the abissca of the plot is in arbitary units, there is no loss in accuracy by making a arbitrary shift on the abiscca for each plot. However, since the horizontal shift is arbitrary, you cannot interpolate along the third degree of freedome graphically as is possible between the other two independat variables
+The example can be thought of as a series of three 2DOF carpet plots each corresponding to a different constant value of a third independent variable. Since the abissca of the plot is in arbitary units, there is no loss in accuracy by making a arbitrary shift on the abiscca for each plot. However, since the horizontal shift is arbitrary, you cannot interpolate along the third degree of freedom graphically as is possible between the other two independent variables
 
 ![](./examples/images/3i_1d.png "Three independent variables against one dependant")
 
 hatched lines
 -------------
+
+This example shows how the hatched line method works to add a hatched line to an matplotlib axis. 
+![](./examples/images/hatched_lines.png "Hatched line examples")
