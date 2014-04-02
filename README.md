@@ -5,8 +5,8 @@ Library of Python functions to generate carpet plots
 
 **Author**: Stephen Andrews
 
-Dependenies
------------
+Dependencies
+------------
 
 * numpy
 * matplotlib
