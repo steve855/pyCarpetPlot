@@ -64,5 +64,5 @@ for i in xrange(len(x1)):
 fobj = numpy.array(fobj)
 
 # pdb.set_trace()
-ax1 = carpet_plot(x1,x2,fobj.T, ofst = 1, label1 = r'$x_{1}$', label2 = r'$x_{2}$', label1_loc = 'start', dep_title = 'Dependant Variable')
+ax1 = carpet_plot(x1,x2,fobj.T, ofst = 1, label1 = r'$x_{1}$', label2 = r'$x_{2}$', label1_loc = 'start', dep_title = 'Dependant Variable', title = '')
 plt.show()

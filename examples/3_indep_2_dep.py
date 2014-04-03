@@ -66,8 +66,8 @@ for k in xrange(len(x3)):
 		fobj.append(tmp)
 	#end
 	fobj = numpy.array(fobj)
-	ax1 = carpet_plot(x1,x2,fobj.T, ofst = 2.5 ,ofst2 = ofst2, axis = ax1, label1 = r'$x_{1}$', label2 = r'$x_{2}$', label2_loc = 'start', dep_title = 'Dependant Variable')
-	ax1.annotate(r'$x_{3}$ = %3.2f'%(x3[k]), xy = label_points[k], textcoords = 'axes fraction', bbox = {'facecolor':'white', 'alpha':0.5})
+	ax1 = carpet_plot(x1,x2,fobj.T, ofst = 2.5 ,ofst2 = ofst2, axis = ax1, label1 = r'$x_{1}$', label2 = r'$x_{2}$',label2_ofst = (0, -10),label1_ofst = (15, 10), label2_loc = 'start', dep_title = 'Dependant Variable', title = r'$x_{3}$ = %3.2f'%(x3[k]))
+	# ax1.annotate(r'$x_{3}$ = %3.2f'%(x3[k]), xy = label_points[k], textcoords = 'axes fraction', bbox = {'facecolor':'white', 'alpha':0.5})
 	ofst2 += 10
 #end
 

@@ -48,7 +48,9 @@ sys.path.append(os.path.abspath('../'))
 # 
 # =============================================================================
 
-def carpet_plot(x1, x2, y, ofst = 1, ofst2 = 0.0, axis = None, x1_skip = 1, x2_skip = 1, label1 = '', label2 = '',  label1_loc = 'end', label2_loc = 'end', dep_title = '', contour_data = None):
+def carpet_plot(x1, x2, y, ofst = 1, ofst2 = 0.0, axis = None, x1_skip = 1, x2_skip = 1, 
+        label1 = '', label2 = '',  label1_loc = 'end', label2_loc = 'end', label1_ofst = (15, 0), label2_ofst = (15, 0), 
+        title = '', title_loc = (1.0, 0.9), dep_title = '', contour_data = None):
     '''
 
     Generates a carpet plot of the data 
@@ -64,8 +66,8 @@ def carpet_plot(x1, x2, y, ofst = 1, ofst2 = 0.0, axis = None, x1_skip = 1, x2_s
 
     **Inputs** 
 
-    - x1 -> (n x 1) numpy array: Vector of first independant values.
-    - x2 -> (m x 1) numpy array: Vector of seccond independant values.
+    - x1 -> (n x 1) numpy array: Vector of first independent values.
+    - x2 -> (m x 1) numpy array: Vector of second independent values.
     - y -> (n x m) numpy.array: Matrix of dependant values.
     - ofst -> FLOAT: Offset factor, can be used to change the shape of the plot, *Default 1.0*
                         - ofst = 1 : trend of y with x1 and x2 of similar magnitude
@@ -85,6 +87,12 @@ def carpet_plot(x1, x2, y, ofst = 1, ofst2 = 0.0, axis = None, x1_skip = 1, x2_s
                     - 'end': at the end of the data 
                     - 'start': at the start of the data 
                     - None: do not show labels
+    - label1_ofst -> 2-TUPPLE: X and Y offset, in pixels, from the selected vertex 
+    - label2_ofst -> 2-TUPPLE: X and Y offset, in pixels, from the selected vertex
+    - title -> STR: String to place above the carpet plot
+    - title_loc -> 2-TUPPLE: X and Y modifiers for the title location 
+            - [0] modifier to the midpoint of the x range 
+            - [1] modifier to the max y point
     - dep_title -> STR: Title to append to the dependant axis
     - contour_data - > (n x m) numpy.array: Matrix of dependant values to plot as a contour. *Default: None*
 
@@ -94,11 +102,13 @@ def carpet_plot(x1, x2, y, ofst = 1, ofst2 = 0.0, axis = None, x1_skip = 1, x2_s
     y = numpy.array(y)
     contour_data = numpy.array(contour_data)
 
-    # for var in [y, contour_data]: 
-    #     if not (len(x2), len(x1)) == var.shape:
-    #         raise Exception('Shape of input does not agree %s != (%d x %d)'%(var.shape, len(x2), len(x1)))
-    #     #end
-    # #end
+    for var in [y, contour_data]: 
+        if var.shape == (): 
+            pass
+        elif not (len(x2), len(x1)) == var.shape:
+            raise Exception('Shape of input does not agree %s != (%d x %d)'%(var.shape, len(x2), len(x1)))
+        #end
+    #end
 
     def label_map(label_loc):     
         if label_loc == None : return None
@@ -106,17 +116,6 @@ def carpet_plot(x1, x2, y, ofst = 1, ofst2 = 0.0, axis = None, x1_skip = 1, x2_s
         elif label_loc.lower()[0] == 'e': return -1
         else: raise Exception('Invalid data label location')
     #end
-
-    def draw_label(text, loc_xy, label_loc, axis):
-        if label_loc > 0:
-             ha = 'right'
-             va = 'bottom'
-        else:
-             ha = 'left'
-             va = 'bottom'
-        #end
-        axis.annotate(text, xy = loc_xy, xytext = (15, 0), textcoords = 'offset points', ha = ha, va = va)
-
     
     label1_loc, label2_loc = map(label_map, [label1_loc, label2_loc])
 
@@ -133,17 +132,21 @@ def carpet_plot(x1, x2, y, ofst = 1, ofst2 = 0.0, axis = None, x1_skip = 1, x2_s
     for i in xrange(0,len(x1),x1_skip):
         ax1.plot(x_cheat[:,i], y[:,i], '-k')
         if not label1_loc == None:
-            ax1.annotate(r'%s = %3.2f'%(label1, x1[i]), xy = (x_cheat[label1_loc,i], y[label1_loc,i]), xytext = (15, 0), textcoords = 'offset points')
-            # draw_label(r'%s = %3.2f'%(label1, x1[i]), (x_cheat[label1_loc,i], y[label1_loc,i]), label1_loc, ax1)
+            ax1.annotate(r'%s = %3.2f'%(label1, x1[i]), xy = (x_cheat[label1_loc,i], y[label1_loc,i]), xytext = label1_ofst, textcoords = 'offset points')
         #end
     #end
 
     for i in xrange(0,len(x2),x2_skip):
         ax1.plot(x_cheat[i,:], y[i,:], '-k')
         if not label2_loc == None:
-            ax1.annotate(r'%s = %3.2f'%(label2, x2[i]), xy = (x_cheat[i,label2_loc], y[i,label2_loc]), xytext = (10, 15), textcoords = 'offset points')
-            # draw_label(r'%s = %3.2f'%(label2, x2[i]), (x_cheat[i,label2_loc], y[i,label2_loc]), label2_loc, ax1)
+            ax1.annotate(r'%s = %3.2f'%(label2, x2[i]), xy = (x_cheat[i,label2_loc], y[i,label2_loc]), xytext = label2_ofst, textcoords = 'offset points')
         #end
+
+    if title == '':
+        pass
+    else:
+        ax1.annotate('%s'%(title), xy = (title_loc[0] * 0.5 * (numpy.max(x_cheat) + numpy.min(x_cheat)), title_loc[1] * numpy.max(y)), xytext = (0,0), textcoords = 'offset points', bbox = {'facecolor':'white', 'alpha':0.5})
+    #end
 
     if not contour_data == None:
         try:

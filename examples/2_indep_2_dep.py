@@ -48,7 +48,7 @@ from pyCarpetPlot import *
 # 
 # =============================================================================
 f = lambda x1 ,x2: x1**2+x2**2-2*x1-2*x2+2
-f2 = lambda x1 ,x2: (x1)**0.5+(x2)**4 -2*x1+2*x2
+f2 = lambda x1 ,x2: (x1*x2)**0.5
 
 x1 = numpy.linspace(2,5,4)
 x2 = numpy.linspace(1,3,3)
@@ -63,12 +63,12 @@ for i in xrange(len(x1)):
 		tmp2.append(f2(x1[i], x2[j]))
 	#end
 	fobj.append(tmp)
-	contour.append(tmp)
+	contour.append(tmp2)
 #end
 
 fobj = numpy.array(fobj)
 contour = numpy.array(contour)
 
 # pdb.set_trace()
-ax1 = carpet_plot(x1,x2,fobj.T, ofst = 2, label1 = r'$x_{1}$', label2 = r'$x_{2}$', label1_loc = 'end', dep_title = 'Dependant Variable', contour_data = contour.T)
+ax1 = carpet_plot(x1,x2,fobj.T, ofst = 3, label1 = r'$x_{1}$', label2 = r'$x_{2}$', label1_loc = 'end', label1_ofst = (10,0), label2_ofst = (0,15), dep_title = 'Dependant Variable', contour_data = contour.T)
 plt.show()
