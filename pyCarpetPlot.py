@@ -50,7 +50,7 @@ sys.path.append(os.path.abspath('../'))
 
 def carpet_plot(x1, x2, y, ofst = 1, ofst2 = 0.0, axis = None, x1_skip = 1, x2_skip = 1, 
         label1 = '', label2 = '',  label1_loc = 'end', label2_loc = 'end', label1_ofst = (15, 0), label2_ofst = (15, 0), 
-        title = '', title_loc = (1.0, 0.9), dep_title = '', contour_data = None):
+        title = '', title_loc = (1.0, 0.9), dep_title = '', contour_data = None, contour_format = {}, clabel_format = {}):
     '''
 
     Generates a carpet plot of the data 
@@ -95,6 +95,8 @@ def carpet_plot(x1, x2, y, ofst = 1, ofst2 = 0.0, axis = None, x1_skip = 1, x2_s
             - [1] modifier to the max y point
     - dep_title -> STR: Title to append to the dependant axis
     - contour_data - > (n x m) numpy.array: Matrix of dependant values to plot as a contour. *Default: None*
+    - contour_format -> DICT: Dictionary of contour formating inputs 
+    - cabel_format -> DICT: Dictionary of contour label formating inputs 
 
     '''
 
@@ -141,6 +143,7 @@ def carpet_plot(x1, x2, y, ofst = 1, ofst2 = 0.0, axis = None, x1_skip = 1, x2_s
         if not label2_loc == None:
             ax1.annotate(r'%s = %3.2f'%(label2, x2[i]), xy = (x_cheat[i,label2_loc], y[i,label2_loc]), xytext = label2_ofst, textcoords = 'offset points')
         #end
+    #end
 
     if title == '':
         pass
@@ -150,9 +153,14 @@ def carpet_plot(x1, x2, y, ofst = 1, ofst2 = 0.0, axis = None, x1_skip = 1, x2_s
 
     if not contour_data == None:
         try:
-            CS = ax1.contour(x_cheat, y, contour_data, colors='b')
-            ax1.clabel(CS, fontsize=9, inline=1)
+            format_dict = {'colors': 'b'}
+            format_dict.update(contour_format)
+            CS = ax1.contour(x_cheat, y, contour_data, **format_dict)
+            format_dict = {'fontsize': 9, 'inline':1}
+            format_dict.update(clabel_format)
+            ax1.clabel(CS, **format_dict)
         except:
+            pdb.post_mortem()
             pass
         #end
     #end
