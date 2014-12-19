@@ -48,7 +48,7 @@ sys.path.append(os.path.abspath('../'))
 # 
 # =============================================================================
 
-def carpet_plot(x1, x2, y, ofst = 1, ofst2 = 0.0, axis = None, x1_skip = 1, x2_skip = 1, 
+def carpet_plot(x1, x2, y, ofst = 1.0, ofst2 = 0.0, axis = None, x1_skip = 1, x2_skip = 1, 
         label1 = '', label2 = '',  label1_loc = 'end', label2_loc = 'end', label1_ofst = (15, 0), label2_ofst = (15, 0), 
         title = '', title_loc = (1.0, 0.9), dep_title = '', contour_data = None, contour_format = {}, clabel_format = {}):
     '''
@@ -102,15 +102,15 @@ def carpet_plot(x1, x2, y, ofst = 1, ofst2 = 0.0, axis = None, x1_skip = 1, x2_s
 
     # Input checks and conditioning
     y = numpy.array(y)
-    contour_data = numpy.array(contour_data)
+    # contour_data = numpy.array(contour_data)
 
-    for var in [y, contour_data]: 
-        if var.shape == (): 
-            pass
-        elif not (len(x2), len(x1)) == var.shape:
-            raise Exception('Shape of input does not agree %s != (%d x %d)'%(var.shape, len(x2), len(x1)))
-        #end
-    #end
+    # for var in [y, contour_data]: 
+    #     if var.shape == (): 
+    #         pass
+    #     elif not (len(x2), len(x1)) == var.shape:
+    #         raise Exception('Shape of input does not agree %s != (%d x %d)'%(var.shape, len(x2), len(x1)))
+    #     #end
+    # #end
 
     def label_map(label_loc):     
         if label_loc == None : return None
@@ -123,7 +123,9 @@ def carpet_plot(x1, x2, y, ofst = 1, ofst2 = 0.0, axis = None, x1_skip = 1, x2_s
 
     xx1, xx2 = numpy.meshgrid(x1, x2)
 
+    # pdb.set_trace()
     x_cheat = ofst2 + (xx1 + ofst * xx2)
+    # x_cheat = ofst2 + (xx1 + 10.0 * xx2)
     
     if axis == None:
         ax1 = plt.subplot(111)
@@ -153,12 +155,23 @@ def carpet_plot(x1, x2, y, ofst = 1, ofst2 = 0.0, axis = None, x1_skip = 1, x2_s
 
     if not contour_data == None:
         try:
-            format_dict = {'colors': 'b'}
-            format_dict.update(contour_format)
-            CS = ax1.contour(x_cheat, y, contour_data, **format_dict)
-            format_dict = {'fontsize': 9, 'inline':1}
-            format_dict.update(clabel_format)
-            ax1.clabel(CS, **format_dict)
+            for i in xrange(len(contour_data)):
+                if 'filled' in contour_format[i]:
+                    filled = contour_format[i].pop('filled')
+                    format_dict = {}
+                else:
+                    filled = False
+                    format_dict = {'colors': 'b'}
+                #end
+                format_dict.update(contour_format[i])
+                if filled:
+                    CS = ax1.contourf(x_cheat, y, contour_data[i], **format_dict)
+                else:
+                    CS = ax1.contour(x_cheat, y, contour_data[i], **format_dict)
+                format_dict = {'fontsize': 9, 'inline':1}
+                format_dict.update(clabel_format)
+                ax1.clabel(CS, **format_dict)
+            #end
         except:
             pdb.post_mortem()
             pass
