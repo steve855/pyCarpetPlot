@@ -48,9 +48,9 @@ sys.path.append(os.path.abspath('../'))
 # 
 # =============================================================================
 
-def carpet_plot(x1, x2, y, ofst = 1.0, ofst2 = 0.0, axis = None, x1_skip = 1, x2_skip = 1, 
+def carpet_plot(x1, x2, y, ofst = 1.0, ofst2 = 0.0, axis = None, x1_skip = 1, x2_skip = 1, idep2_style = None,
         label1 = '', label2 = '',  label1_loc = 'end', label2_loc = 'end', label1_ofst = (15, 0), label2_ofst = (15, 0), 
-        title = '', title_loc = (1.0, 0.9), dep_title = '', contour_data = None, contour_format = {}, clabel_format = {}):
+        title = '', title_loc = (1.0, 0.9), dep_title = '', contour_data = None, contour_format = {}, clabel_format = {}, x_cheat_out = None):
     '''
 
     Generates a carpet plot of the data 
@@ -74,6 +74,7 @@ def carpet_plot(x1, x2, y, ofst = 1.0, ofst2 = 0.0, axis = None, x1_skip = 1, x2
                         - ofst > 1 : trend of y with x2 more pronounced 
                         - ofst < 1 : trend of y with x1 more pronounced
     - ofst2 -> FLOAT: Offset for plotting multiple carpet plots on one axis
+    - idep2_style -> STR: Format string for second independent variable lines. None is same as x1 *Default: None*
     - axis -> matplotlib.pyplot.axis: An axis object to plot on
     - x1_skip -> INT: Value n to read every n values. 
     - x2_skip -> INT: Value n to read every n values.
@@ -93,10 +94,11 @@ def carpet_plot(x1, x2, y, ofst = 1.0, ofst2 = 0.0, axis = None, x1_skip = 1, x2
     - title_loc -> 2-TUPPLE: X and Y modifiers for the title location 
             - [0] modifier to the midpoint of the x range 
             - [1] modifier to the max y point
-    - dep_title -> STR: Title to append to the dependant axis
-    - contour_data - > (n x m) numpy.array: Matrix of dependant values to plot as a contour. *Default: None*
-    - contour_format -> DICT: Dictionary of contour formating inputs 
-    - cabel_format -> DICT: Dictionary of contour label formating inputs 
+    - dep_title -> STR: Title to append to the dependent axis
+    - contour_data - > LIST of (n x m) numpy.array: List of  matrices of dependent values to plot as a contour. *Default: None*
+    - contour_format -> LIST of DICT: List of Dictionaries of contour formating inputs 
+    - cabel_format -> LIST DICT: List of Dictionaries of contour label formating inputs 
+    - x_cheat_out -> LIST: IO variable for cheater axis values
 
     '''
 
@@ -125,6 +127,7 @@ def carpet_plot(x1, x2, y, ofst = 1.0, ofst2 = 0.0, axis = None, x1_skip = 1, x2
 
     # pdb.set_trace()
     x_cheat = ofst2 + (xx1 + ofst * xx2)
+    x_cheat_out = x_cheat
     # x_cheat = ofst2 + (xx1 + 10.0 * xx2)
     
     if axis == None:
@@ -133,13 +136,16 @@ def carpet_plot(x1, x2, y, ofst = 1.0, ofst2 = 0.0, axis = None, x1_skip = 1, x2
         ax1 = axis
     #end
 
+    if idep2_style == None:
+        idep2_style = '-k'
+    #end
+
     for i in xrange(0,len(x1),x1_skip):
-        ax1.plot(x_cheat[:,i], y[:,i], '-k')
+        ax1.plot(x_cheat[:,i], y[:,i], idep2_style)
         if not label1_loc == None:
             ax1.annotate(r'%s = %3.2f'%(label1, x1[i]), xy = (x_cheat[label1_loc,i], y[label1_loc,i]), xytext = label1_ofst, textcoords = 'offset points')
         #end
     #end
-
     for i in xrange(0,len(x2),x2_skip):
         ax1.plot(x_cheat[i,:], y[i,:], '-k')
         if not label2_loc == None:
@@ -172,8 +178,9 @@ def carpet_plot(x1, x2, y, ofst = 1.0, ofst2 = 0.0, axis = None, x1_skip = 1, x2
                 format_dict.update(clabel_format)
                 ax1.clabel(CS, **format_dict)
             #end
-        except:
-            pdb.post_mortem()
+        except Exceptions as inst:
+            raise Exception("pyCarpetPlot: Could not plot contours of independent data due to %s"%(inst))
+            # pdb.post_mortem()
             pass
         #end
     #end
