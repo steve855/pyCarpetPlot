@@ -178,7 +178,7 @@ def carpet_plot(x1, x2, y, ofst = 1.0, ofst2 = 0.0, axis = None, x1_skip = 1, x2
                 format_dict.update(clabel_format)
                 ax1.clabel(CS, **format_dict)
             #end
-        except Exceptions as inst:
+        except Exception as inst:
             raise Exception("pyCarpetPlot: Could not plot contours of independent data due to %s"%(inst))
             # pdb.post_mortem()
             pass
