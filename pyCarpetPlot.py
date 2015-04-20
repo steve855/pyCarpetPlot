@@ -143,13 +143,13 @@ def carpet_plot(x1, x2, y, ofst = 1.0, ofst2 = 0.0, axis = None, x1_skip = 1, x2
     for i in xrange(0,len(x1),x1_skip):
         ax1.plot(x_cheat[:,i], y[:,i], idep2_style)
         if not label1_loc == None:
-            ax1.annotate(r'%s = %3.2f'%(label1, x1[i]), xy = (x_cheat[label1_loc,i], y[label1_loc,i]), xytext = label1_ofst, textcoords = 'offset points')
+            ax1.annotate(r'%s%3.2f'%(label1, x1[i]), xy = (x_cheat[label1_loc,i], y[label1_loc,i]), xytext = label1_ofst, textcoords = 'offset points')
         #end
     #end
     for i in xrange(0,len(x2),x2_skip):
         ax1.plot(x_cheat[i,:], y[i,:], '-k')
         if not label2_loc == None:
-            ax1.annotate(r'%s = %3.2f'%(label2, x2[i]), xy = (x_cheat[i,label2_loc], y[i,label2_loc]), xytext = label2_ofst, textcoords = 'offset points')
+            ax1.annotate(r'%s%3.2f'%(label2, x2[i]), xy = (x_cheat[i,label2_loc], y[i,label2_loc]), xytext = label2_ofst, textcoords = 'offset points')
         #end
     #end
 
@@ -179,8 +179,8 @@ def carpet_plot(x1, x2, y, ofst = 1.0, ofst2 = 0.0, axis = None, x1_skip = 1, x2
                 ax1.clabel(CS, **format_dict)
             #end
         except Exception as inst:
+            pdb.post_mortem()
             raise Exception("pyCarpetPlot: Could not plot contours of independent data due to %s"%(inst))
-            # pdb.post_mortem()
             pass
         #end
     #end
