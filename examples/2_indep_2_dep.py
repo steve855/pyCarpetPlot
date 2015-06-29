@@ -67,8 +67,8 @@ for i in xrange(len(x1)):
 #end
 
 fobj = numpy.array(fobj)
-contour = numpy.array(contour)
+contour = [numpy.array(contour).T]
 
 # pdb.set_trace()
-ax1 = carpet_plot(x1,x2,fobj.T, ofst = 3, label1 = r'$x_{1}$', label2 = r'$x_{2}$', label1_loc = 'end', label1_ofst = (10,0), label2_ofst = (0,15), dep_title = 'Dependant Variable', contour_data = contour.T)
+ax1 = carpet_plot(x1,x2,fobj.T, ofst = 3, label1 = r'$x_{1}$', label2 = r'$x_{2}$', label1_loc = 'end', label1_ofst = (10,0), label2_ofst = (0,15), dep_title = 'Dependant Variable', contour_data = contour)
 plt.show()

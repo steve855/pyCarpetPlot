@@ -50,7 +50,7 @@ sys.path.append(os.path.abspath('../'))
 
 def carpet_plot(x1, x2, y, ofst = 1.0, ofst2 = 0.0, axis = None, x1_skip = 1, x2_skip = 1, idep2_style = None,
         label1 = '', label2 = '',  label1_loc = 'end', label2_loc = 'end', label1_ofst = (15, 0), label2_ofst = (15, 0), 
-        title = '', title_loc = (1.0, 0.9), dep_title = '', contour_data = None, contour_format = {}, clabel_format = {}, x_cheat_out = None):
+        title = '', title_loc = (1.0, 0.9), dep_title = '', contour_data = None, contour_format = [{}], clabel_format = {}, x_cheat_out = None):
     '''
 
     Generates a carpet plot of the data 
